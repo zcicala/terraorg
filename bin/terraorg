@@ -24,6 +24,7 @@ CACHE_FILE = ENV.fetch('TERRAORG_OKTA_CACHE', 'okta_cache')
 GSUITE_DOMAIN = ENV.fetch('GSUITE_DOMAIN')
 SLACK_DOMAIN = ENV.fetch('SLACK_DOMAIN', 'yourcompany.slack.com')
 OKTA_ORG_NAME = ENV.fetch('OKTA_ORG_NAME')
+OKTA_API_TOKEN = ENV.fetch('OKTA_API_TOKEN')
 OKTA_BASE_URL = ENV.fetch('OKTA_BASE_URL', 'okta.com')
 
 action = ARGV[0]

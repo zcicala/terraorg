@@ -16,9 +16,9 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.3'
 
-  gem.add_dependency 'faraday'
-  gem.add_dependency 'neatjson'
-  gem.add_dependency 'oktakit'
+  gem.add_dependency 'faraday', '~> 1'
+  gem.add_dependency 'neatjson', '~> 0.9'
+  gem.add_dependency 'oktakit', '~> 0.2'
 
   # ensure the gem is built out of versioned files
   gem.files = Dir['{bin,lib}/**/*', 'README*', 'LICENSE*']

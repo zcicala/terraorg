@@ -1,0 +1,17 @@
+language: ruby
+rvm:
+  - 2.4
+  - 2.5
+  - 2.6
+stages:
+  - name: install
+    script: bundle install --path vendor/bundle
+  - name: gem-build
+    script: gem build terraorg.gemspec
+  - name: prepare-push
+    script: echo ":github: Bearer $GITHUB_TOKEN" >> ~/.gem/credentials
+    if: branch = master
+  - name: push
+    script: gem push --key github --host https://rubygems.pkg.github.com/joshk0 terraorg-*.gem
+    if: branch = master
+secure: "XnXUbRu5I9eFpLqGVEWPpShB3eMHoVPTgumP8xH/qgIOjgJm2exhcg7Aws8yDrrVksiRLls6XHc9Qe2czmbnni5wJv3gTeJ/9qzya9YP9hYWYuO8EKx3XsIKF/KxFjJiihhtlhuiWTGQMgcVLF3ELCHQwkjD4ltbEluyjVp5k8o95Yxshvlwc9Th1zvO6piZ6tWYZGY+3OO2VQhI8BbsY8mD8kq+DQutK8xl+Kg/yusCTL0Tpc+fTKvckYh9LrCU7XFla4Y4Vfo2FGXddya9ewijn1ij2koMkutMUvubRVv+UN4fZPVjWke1t2ThCT3HZ1JjqGdmoT3N2wOXsl1WbbExepkvPHXV9DxSXwiOSoGanm1L6Aw/8sWbRuspb32xam/S4cTucSavFevEtW1iY7TiFkR8f76XtvF0hp1o84co8MWHLRBwIbtiyZsuC8UIOC5J0ELfp/ivNPdH399REVemksYhTZjiuXctA2rAfvSFijAIIw9a0ThFqPYrieVq+fIV/CVKufbM3aMYsYlnqTq1XeuL5SwaWL/WSlz6I02n/uAUFSOpwaXAsA843tPu+4qQfFhZ9jF2bcbqeiee2X4q7KsB+OzX5ZVUhJKjs69VgX9XoKnzap0wsBsQS9ISHH0Bz/VjOPgkTso3OeAb7ddbhgK+2UydpPMo3OFoZ/o="
