@@ -1,0 +1,99 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'neatjson'
+require 'oktakit'
+
+require 'terraorg/model/org'
+require 'terraorg/model/people'
+require 'terraorg/model/platoons'
+require 'terraorg/model/squads'
+
+ACTIONS = [
+  'fmt',
+  'generate-platoons-md',
+  'generate-squads-md',
+  'generate-tf',
+  'validate'
+].freeze
+
+SQUADS_FILE = ENV.fetch('TERRAORG_SQUADS', 'squads.json')
+PLATOONS_FILE = ENV.fetch('TERRAORG_PLATOONS', 'platoons.json')
+ORG_FILE = ENV.fetch('TERRAORG_ROOT', 'org.json')
+CACHE_FILE = ENV.fetch('TERRAORG_OKTA_CACHE', 'okta_cache')
+GSUITE_DOMAIN = ENV.fetch('GSUITE_DOMAIN')
+SLACK_DOMAIN = ENV.fetch('SLACK_DOMAIN', 'yourcompany.slack.com')
+OKTA_ORG_NAME = ENV.fetch('OKTA_ORG_NAME')
+OKTA_BASE_URL = ENV.fetch('OKTA_BASE_URL', 'okta.com')
+
+action = ARGV[0]
+raise "Invalid action: '#{action}' (valid: #{ACTIONS})" unless ACTIONS.member?(action)
+
+### Actions that can run without Okta
+case action
+when 'fmt'
+  # This People object is created with neither an okta cache nor a okta client.
+  # It accepts any user for the purposes of format validation.
+  people = People.new
+  squads_data = File.read(SQUADS_FILE)
+  squads = Squads.new(JSON.parse(squads_data), people, GSUITE_DOMAIN, SLACK_DOMAIN)
+  platoons_data = File.read(PLATOONS_FILE)
+  platoons = Platoons.new(JSON.parse(platoons_data), squads, people, GSUITE_DOMAIN)
+  org_data = File.read(ORG_FILE)
+  org = Org.new(JSON.parse(org_data), platoons, squads, people, GSUITE_DOMAIN)
+
+  options = {wrap: true, sort: true, after_colon: 1, after_comma: 1}
+  new_squads_data = JSON.neat_generate(squads.to_h, **options) + "\n"
+  new_platoons_data = JSON.neat_generate(platoons.to_h, **options) + "\n"
+  new_org_data = JSON.neat_generate(org.to_h, **options) + "\n"
+
+  if new_squads_data != squads_data
+    puts SQUADS_FILE
+    File.write(SQUADS_FILE, new_squads_data)
+  end
+
+  if new_platoons_data != platoons_data
+    puts PLATOONS_FILE
+    File.write(PLATOONS_FILE, new_platoons_data)
+  end
+
+  if new_org_data != org_data
+    puts ORG_FILE
+    File.write(ORG_FILE, new_org_data)
+  end
+
+  exit
+end
+
+### Actions that require Okta credentials
+if OKTA_BASE_URL == 'oktapreview.com'
+  okta = Oktakit.new(token: OKTA_API_TOKEN, api_endpoint: "https://#{OKTA_ORG_NAME}.#{OKTA_BASE_URL}/api/v1")
+else
+  okta = Oktakit.new(token: OKTA_API_TOKEN, organization: OKTA_ORG_NAME)
+end
+
+people = People.new(okta: okta, cache_file: CACHE_FILE)
+squads_data = File.read(SQUADS_FILE)
+squads = Squads.new(JSON.parse(squads_data), people, GSUITE_DOMAIN, SLACK_DOMAIN)
+platoons_data = File.read(PLATOONS_FILE)
+platoons = Platoons.new(JSON.parse(platoons_data), squads, people, GSUITE_DOMAIN)
+org_data = File.read(ORG_FILE)
+org = Org.new(JSON.parse(org_data), platoons, squads, people, GSUITE_DOMAIN)
+
+org.validate!
+
+case action
+when 'generate-squads-md'
+  # Generate CSV file mirroring the 'Engineering Squads' Squads sheet.
+  puts org.get_squads_md
+when 'generate-platoons-md'
+  # Generate CSV file mirroring the 'Engineering Squads' Platoons sheet.
+  puts org.get_platoons_md
+when 'generate-tf'
+  # Generate Terraform code to apply to Okta.
+  org.generate_tf
+when 'validate'
+  # Validation is a prerequisite, so just output success. It would have
+  # failed earlier otherwise
+  puts 'Organization is valid!'
+end
