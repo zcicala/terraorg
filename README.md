@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/joshk0/terraorg.svg?token=KqPPGKhNmsFv3uhyxvvf&branch=master)](https://travis-ci.com/joshk0/terraorg)
+
 # terraorg
 
 This tool helps define organizational structure using flat JSON files as a
