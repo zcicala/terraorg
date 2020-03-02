@@ -9,10 +9,11 @@ class Util
   # Take a list of Persons and generate a gsuite_group containing all of those
   # members with expected organizational settings.
   def self.gsuite_group_tf(name, domain, persons, description)
+    email = "#{name}@#{domain}"
     tf = <<-TERRAFORM
 # G Suite group for #{email}
 resource "gsuite_group" "#{name}" {
-  email = "#{name}@#{domain}"
+  email = "#{email}"
   name  = "#{name}"
   description = "#{description}"
 }
