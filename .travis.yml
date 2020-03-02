@@ -2,11 +2,12 @@ language: ruby
 rvm:
   - 2.6
 script: gem build terraorg.gemspec
+env:
+  global:
+    - secure: "kitKebGzP1g1V6Xwqex6t4kmnfwEGIZo0HbZnrU0JiIXVJFzPW5ZHd3gbYK0cZF+Z8HOKxfOWsz+YB/sKw9Hp6juWMPIArdH5l+BfZLmTTb5Bt8mArjgLJFHgK/BtKZksxoYmTELLGJdrfev0grDOXFK/WgHIIpUauo4911sTvav1GsHtJdGyWeHnHOSoKNfmRygmmlW9irwdfczMdDQZP6LGu2QkisdQdV83IGYYa2yGRmgRTrR1UCPoY9GnGW16qIlDPxxN4meUz/wAhf8IpiPHtS9nmdNUZjG0zdCJsT2YBr0Hb4nTcRJ2JygLfTTjZ665Hsbx+OXicTRF/Qlvp607896QBTXsTjL1jXO4RhWt5Hb2+tp7sWl8mlhz924Wt7I+QSZJU3YNkquwToqdtHUoWmLBaPjkKZInSLF0YCBy+rql9+6QKxx2+yIZHVNGuU7mQWmxRq637zjEFElxyWhc79mj5tHNadDs4zQSay8KcrVTiMH2/L4uwZIiekzhzFTuogVdldFtBCMC/rQKEUJd8NNx8wPniXqSMAfWtzENI6qCRYXLILHTb+9uxMZS1M8qI/XksGx7/Cp4D0g5sq+HE0YOEyLLvvE3LiNdx8OfEPdQHRFA8CC/JDI2ZI0LQ/cLTjT+nHjG10SWFhC3wV8/eg1gNfG38BPf0NS4sg="
 deploy:
   - skip_cleanup: true
     on:
       - tags: true
     provider: script
     script: .travis/publish
-    env:
-      - secure: "kitKebGzP1g1V6Xwqex6t4kmnfwEGIZo0HbZnrU0JiIXVJFzPW5ZHd3gbYK0cZF+Z8HOKxfOWsz+YB/sKw9Hp6juWMPIArdH5l+BfZLmTTb5Bt8mArjgLJFHgK/BtKZksxoYmTELLGJdrfev0grDOXFK/WgHIIpUauo4911sTvav1GsHtJdGyWeHnHOSoKNfmRygmmlW9irwdfczMdDQZP6LGu2QkisdQdV83IGYYa2yGRmgRTrR1UCPoY9GnGW16qIlDPxxN4meUz/wAhf8IpiPHtS9nmdNUZjG0zdCJsT2YBr0Hb4nTcRJ2JygLfTTjZ665Hsbx+OXicTRF/Qlvp607896QBTXsTjL1jXO4RhWt5Hb2+tp7sWl8mlhz924Wt7I+QSZJU3YNkquwToqdtHUoWmLBaPjkKZInSLF0YCBy+rql9+6QKxx2+yIZHVNGuU7mQWmxRq637zjEFElxyWhc79mj5tHNadDs4zQSay8KcrVTiMH2/L4uwZIiekzhzFTuogVdldFtBCMC/rQKEUJd8NNx8wPniXqSMAfWtzENI6qCRYXLILHTb+9uxMZS1M8qI/XksGx7/Cp4D0g5sq+HE0YOEyLLvvE3LiNdx8OfEPdQHRFA8CC/JDI2ZI0LQ/cLTjT+nHjG10SWFhC3wV8/eg1gNfG38BPf0NS4sg="
