@@ -1,4 +1,5 @@
 #!/bin/bash
 
 echo ":github: Bearer $GITHUB_TOKEN" > $HOME/.gem/credentials
+chmod 0600 $HOME/.gem/credentials
 gem push --key github --host https://rubygems.pkg.github.com/joshk0 terraorg-*.gem
