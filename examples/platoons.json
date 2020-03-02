@@ -1,0 +1,23 @@
+{
+  "platoons": [
+    {
+      "id": "sprockets",
+      "manager": "manager2",
+      "name": "Sprockets",
+      "squads": [
+        "legal",
+        "logistics"
+      ]
+    },
+    {
+      "id": "widgets",
+      "manager": "manager1",
+      "name": "Widgets",
+      "squads": [
+        "marketing",
+        "sales"
+      ]
+    }
+  ],
+  "version": "v1"
+}
