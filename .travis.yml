@@ -4,6 +4,7 @@ rvm:
 script: gem build terraorg.gemspec
 deploy:
   provider: script
+  skip_cleanup: true
   script: |-
     echo ":github: Bearer $GITHUB_TOKEN" > ~/.gem/credentials
     gem push --key github --host https://rubygems.pkg.github.com/joshk0 terraorg-*.gem
