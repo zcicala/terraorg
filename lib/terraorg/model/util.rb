@@ -18,15 +18,14 @@ resource "gsuite_group" "#{name}" {
   description = "#{description}"
 }
 
-# TODO(joshk): Disabled for now.
-# resource "gsuite_group_settings" "#{name}" {
-#   email = "${gsuite_group.#{name}.email}"
-#   who_can_discover_group = "ALL_IN_DOMAIN_CAN_DISCOVER"
-#   who_can_view_membership = "ALL_IN_DOMAIN_CAN_VIEW"
-#   who_can_leave_group = "NONE_CAN_LEAVE"
-#   who_can_join = "INVITED_CAN_JOIN"
-#   who_can_post_message = "ALL_IN_DOMAIN_CAN_POST"
-# }
+resource "gsuite_group_settings" "#{name}" {
+  email = gsuite_group.#{name}.email
+  who_can_discover_group = "ALL_IN_DOMAIN_CAN_DISCOVER"
+  who_can_view_membership = "ALL_IN_DOMAIN_CAN_VIEW"
+  who_can_leave_group = "NONE_CAN_LEAVE"
+  who_can_join = "INVITED_CAN_JOIN"
+  who_can_post_message = "ALL_IN_DOMAIN_CAN_POST"
+}
 
 resource "gsuite_group_members" "#{name}" {
   group_email = gsuite_group.#{name}.email
