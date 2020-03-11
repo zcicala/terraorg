@@ -16,21 +16,6 @@
 
 -->
 
----
-
-## ⚠️This repository is no longer updated
-
-**This project was developed at LiveRamp, but is no longer the canonical home
-of future progress on this project. To download the latest version, report
-an issue or submit a pull request, please visit [joshk0/terraorg].**
-
-**Any perspectives or direction on the canonical repository are endorsed
-solely by its author and not by LiveRamp.**
-
-[joshk0/terraorg]: https://github.com/joshk0/terraorg
-
----
-
 # terraorg
 
 This tool helps define organizational structure using flat JSON files as a
