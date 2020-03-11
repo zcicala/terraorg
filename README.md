@@ -1,4 +1,35 @@
-[![Build Status](https://travis-ci.com/joshk0/terraorg.svg?token=KqPPGKhNmsFv3uhyxvvf&branch=master)](https://travis-ci.com/joshk0/terraorg)
+<!--
+
+  Copyright 2019-2020 LiveRamp Holdings, Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+
+---
+
+## ⚠️This repository is no longer updated
+
+**This project was developed at LiveRamp, but is no longer the canonical home
+of future progress on this project. To download the latest version, report
+an issue or submit a pull request, please visit [joshk0/terraorg].**
+
+**Any perspectives or direction on the canonical repository are endorsed
+solely by its author and not by LiveRamp.**
+
+[joshk0/terraorg]: https://github.com/joshk0/terraorg
+
+---
 
 # terraorg
 
