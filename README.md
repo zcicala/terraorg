@@ -17,6 +17,7 @@
 -->
 
 [![Build Status](https://travis-ci.com/joshk0/terraorg.svg?branch=master)](https://travis-ci.com/joshk0/terraorg)
+[![Gem Version](https://badge.fury.io/rb/terraorg.svg)](https://badge.fury.io/rb/terraorg)
 
 # terraorg
 
