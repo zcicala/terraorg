@@ -15,7 +15,7 @@
 require 'terraorg/model/util'
 
 class Platoon
-  attr_accessor :id, :name, :member_exceptions, :member_squads
+  attr_accessor :id, :manager, :name, :member_exceptions, :member_squads
 
   def initialize(parsed_data, squads, people, gsuite_domain)
     @id = parsed_data.fetch('id')

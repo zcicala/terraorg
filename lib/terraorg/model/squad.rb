@@ -131,6 +131,15 @@ EOF
     }.join("\n\n")
   end
 
+  def manager
+    m = @metadata['manager']
+    if m
+      return @people.get_or_create!(m)
+    else
+      return nil
+    end
+  end
+
   def to_h
     # Output a canonical (sorted, formatted) version of this Squad.
     # - Subteams are sorted by location lexically
