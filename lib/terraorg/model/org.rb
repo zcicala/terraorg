@@ -220,6 +220,13 @@ resource "okta_group" "#{name}" {
 EOF
     end
 
+    # Generate a special GSuite group for all managers (org, platoon, squad
+    # level.) We don't generate such an okta group (For now)
+    # As Squad#manager may return nil, select the non-nils
+    all_managers = Set.new([@manager] + @platoons.all.map(&:manager) + @squads.all.map(&:manager).select { |m| m })
+    manager_dl = "#{@id}-managers"
+    tf += Util.gsuite_group_tf(manager_dl, @gsuite_domain, all_managers, "All managers of the #{@name} organization (terraorg)")
+
     File.write('auto.org.tf', tf)
   end
 

@@ -28,6 +28,10 @@ class Squads
     end
   end
 
+  def all
+    @squads.values
+  end
+
   def all_names
     @squads.keys
   end
