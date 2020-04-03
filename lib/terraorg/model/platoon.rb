@@ -99,9 +99,9 @@ EOF
   # - Sort the squad ids lexically
   # - Sort the exceptions lexically
   def to_h
-    obj = { 'id' => @id, 'name' => @name, 'manager' => @manager.id, 'squads' => @member_squads.map(&:id) }
+    obj = { 'id' => @id, 'name' => @name, 'manager' => @manager.id, 'squads' => @member_squads.map(&:id).sort }
     unless @member_exceptions.empty?
-      obj['exceptions'] = @member_exceptions.map(&:id)
+      obj['exceptions'] = @member_exceptions.map(&:id).sort
     end
     unless @metadata.empty?
       obj['metadata'] = @metadata

@@ -21,7 +21,7 @@ class Squad
   attr_accessor :id, :name, :metadata, :teams
 
   class Team
-    attr_accessor :location, :members
+    attr_accessor :location, :members, :associates
 
     def initialize(parsed_data, people)
       location = parsed_data.fetch('location')
@@ -40,16 +40,27 @@ class Squad
       raise 'Subteam has no full time members' if @members.size == 0
       # location validation done at initialize time
       # associates can be empty
+
+      # associates and members must have zero intersection
+      associate_set = Set.new(@associates.map(&:id))
+      member_set = Set.new(@members.map(&:id))
+      raise 'A member cannot also be an associate of the same team' if associate_set.intersection(member_set)
     end
 
     # Output a canonical (sorted, formatted) version of this Team.
     # - Sort the members in each team
+    # - Only add an associates field if it's present
     def to_h
-      {
-        'associates' => @associates.map(&:id).sort,
+      rv = {
         'location' => @location,
         'members' => @members.map(&:id).sort,
       }
+
+      if @associates.size > 0
+        rv['associates'] = @associates.map(&:id).sort
+      end
+
+      rv
     end
 
     def everyone

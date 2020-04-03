@@ -15,7 +15,8 @@
 require 'terraorg/model/util'
 
 class Org
-  MAX_SQUADS_PER_PERSON = 2
+  MAX_MEMBER_SQUADS_PER_PERSON = 1
+  MAX_ASSOCIATE_SQUADS_PER_PERSON = 3
   SCHEMA_VERSION = 'v1'.freeze
 
   def initialize(parsed_data, platoons, squads, people, gsuite_domain)
@@ -81,17 +82,31 @@ class Org
       raise "Squads are part of more than one platoon: #{more_than_one_platoon}"
     end
 
-    # Validate that a squad member belongs to at most two squads in the entire org
+    # Validate that a squad member belongs to some maximum number of squads
+    # across the entire org. A person can be an associate of other squads
+    # at a different count. See top of file for defined limits.
     squad_count = {}
     all_squads.map(&:teams).flatten.map(&:values).flatten.map(&:members).flatten.each do |member|
       squad_count[member.id] = squad_count.fetch(member.id, 0) + 1
     end
     more_than_max_squads = squad_count.select do |member, count|
-      count > MAX_SQUADS_PER_PERSON
+      count > MAX_MEMBER_SQUADS_PER_PERSON
     end
     if !more_than_max_squads.empty?
-      # TODO(joshk): Enforce after consulting with Sean
-      $stderr.puts "WARNING: Members are part of more than #{MAX_SQUADS_PER_PERSON} squads: #{more_than_max_squads}"
+      # TODO(joshk): Enforce after April 17th
+      $stderr.puts "WARNING: Members are part of more than #{MAX_MEMBER_SQUADS_PER_PERSON} squads: #{more_than_max_squads}"
+    end
+
+    associate_count = {}
+    all_squads.map(&:teams).flatten.map(&:values).flatten.map(&:associates).flatten.each do |assoc|
+      associate_count[assoc.id] = associate_count.fetch(assoc.id, 0) + 1
+    end
+    more_than_max_squads = associate_count.select do |_, count|
+      count > MAX_ASSOCIATE_SQUADS_PER_PERSON
+    end
+    if !more_than_max_squads.empty?
+      # TODO(joshk): Enforce after April 17th
+      $stderr.puts "WARNING: People associated with more than #{MAX_ASSOCIATE_SQUADS_PER_PERSON} squads: #{more_than_max_squads}"
     end
 
     # Validate that a squad member is not also an org exception
