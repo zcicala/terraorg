@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require 'countries'
+
 require 'terraorg/model/people'
 require 'terraorg/model/util'
 
@@ -22,20 +24,40 @@ class Squad
     attr_accessor :location, :members
 
     def initialize(parsed_data, people)
-      @location = parsed_data.fetch('location')
+      location = parsed_data.fetch('location')
+      country = ISO3166::Country.new(location)
+      raise "Location is invalid: #{location}" unless country
+      @location = country.alpha2
       @members = parsed_data.fetch('members', []).map do |n|
         people.get_or_create!(n)
       end
+      @associates = parsed_data.fetch('associates', []).map do |n|
+        people.get_or_create!(n)
+      end
+    end
+
+    def validate!
+      raise 'Subteam has no full time members' if @members.size == 0
+      # location validation done at initialize time
+      # associates can be empty
     end
 
     # Output a canonical (sorted, formatted) version of this Team.
     # - Sort the members in each team
     def to_h
-      { 'location' => @location, 'members' => @members.map(&:id).sort }
+      {
+        'associates' => @associates.map(&:id).sort,
+        'location' => @location,
+        'members' => @members.map(&:id).sort,
+      }
+    end
+
+    def everyone
+      @associates + @members
     end
 
     def to_md
-      "**#{@location}**: #{@members.map(&:name).sort.join(', ')}"
+      "**#{@location}**: #{@members.map(&:name).sort.join(', ')}, #{@associates.map { |m| "_#{m.name}_" }.sort.join(', ')}"
     end
   end
 
@@ -53,10 +75,18 @@ class Squad
     @teams = Hash[teams_arr.map { |t| [t.location, t] }]
   end
 
-  def members(location: nil)
+  # Everyone including associates on all subteams in the squad.
+  def everyone(location: nil)
     @teams.select { |l, t|
       location == nil || l == location
-    }.map { |l, t|
+    }.map { |_, t|
+      t.everyone
+    }.flatten
+  end
+
+  # Full-time members of all subteams in this squad
+  def members
+    @teams.map { |_, t|
       t.members
     }.flatten
   end
@@ -64,11 +94,11 @@ class Squad
   def get_acl_groups(org_id)
     # each geographically located subteam
     groups = Hash[@teams.map { |location, team|
-      [unique_name(org_id, location), {'name' => "#{@name} squad members based in #{location}", 'members' => team.members}]
+      [unique_name(org_id, location), {'name' => "#{@name} squad members based in #{location}", 'members' => team.everyone}]
     }]
 
     # combination of all subteams
-    groups[unique_name(org_id, nil)] = {'name' => "#{@name} squad worldwide members", 'members' => members}
+    groups[unique_name(org_id, nil)] = {'name' => "#{@name} squad worldwide members", 'members' => everyone}
 
     groups
   end
@@ -82,7 +112,7 @@ class Squad
   end
 
   def validate!
-    raise 'Squad has no members' if members.size == 0
+    @teams.each(&:validate!)
   end
 
   def to_md(platoon_name, org_id)
@@ -110,7 +140,7 @@ class Squad
     if slack
       slack = "[#{slack}](https://#{@slack_domain}/app_redirect?channel=#{slack.gsub(/^#/, '')})"
     end
-    # platoon name, squad name, PM, email list, SME, slack, # people, squad manager, eng product owner, members
+    # platoon name, squad name, PM, email list, SME, slack, # full time members, squad manager, eng product owner, members
     "|#{platoon_name}|#{@name}|#{pm}|[#{email}](#{email})|#{sme}|#{slack}|#{members.size}|#{manager}|#{epo}|#{subteam_members}|"
   end
 
