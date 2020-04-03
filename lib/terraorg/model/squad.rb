@@ -124,11 +124,6 @@ class Squad
       sme = @people.get_or_create!(sme).name
     end
 
-    epo = @metadata.fetch('epo', '')
-    if !epo.empty?
-      epo = @people.get_or_create!(epo).name
-    end
-
     manager = @metadata.fetch('manager', '')
     if !manager.empty?
       manager = @people.get_or_create!(manager).name
@@ -140,8 +135,8 @@ class Squad
     if slack
       slack = "[#{slack}](https://#{@slack_domain}/app_redirect?channel=#{slack.gsub(/^#/, '')})"
     end
-    # platoon name, squad name, PM, email list, SME, slack, # full time members, squad manager, eng product owner, members
-    "|#{platoon_name}|#{@name}|#{pm}|[#{email}](#{email})|#{sme}|#{slack}|#{members.size}|#{manager}|#{epo}|#{subteam_members}|"
+    # platoon name, squad name, PM, email list, SME, slack, # full time members, squad manager, members
+    "|#{platoon_name}|#{@name}|#{pm}|[#{email}](#{email})|#{sme}|#{slack}|#{members.size}|#{manager}|#{subteam_members}|"
   end
 
   def generate_tf(org_id)
