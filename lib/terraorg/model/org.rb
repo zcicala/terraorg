@@ -168,7 +168,7 @@ class Org
     md_lines = [
       '# Engineering Squads List',
       '',
-      '|Platoon|Squad|PM|Mailing list|TS SME|Slack|# Engineers|Squad Manager|Eng Product Owner|Members|',
+      '|Platoon|Squad|PM|Mailing list|TS SME|Slack|# Engineers|Squad Manager|Members|',
       '|---|---|---|---|---|---|---|---|---|---|',
     ]
     md_lines += @member_platoons.map { |s| s.get_squads_psv_rows(@id) }

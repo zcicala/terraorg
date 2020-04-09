@@ -51,16 +51,11 @@ class Squad
     # - Sort the members in each team
     # - Only add an associates field if it's present
     def to_h
-      rv = {
+      {
+        'associates' => @associates.map(&:id).sort,
         'location' => @location,
         'members' => @members.map(&:id).sort,
       }
-
-      if @associates.size > 0
-        rv['associates'] = @associates.map(&:id).sort
-      end
-
-      rv
     end
 
     def everyone
