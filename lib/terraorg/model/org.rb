@@ -169,7 +169,7 @@ class Org
       '# Engineering Squads List',
       '',
       '|Platoon|Squad|PM|Mailing list|TS SME|Slack|# Engineers|Squad Manager|Members|',
-      '|---|---|---|---|---|---|---|---|---|---|',
+      '|---|---|---|---|---|---|---|---|---|',
     ]
     md_lines += @member_platoons.map { |s| s.get_squads_psv_rows(@id) }
     md_lines += @member_exception_squads.map { |s| s.to_md('_No Platoon_', @id) }
