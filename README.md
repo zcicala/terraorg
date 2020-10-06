@@ -126,6 +126,10 @@ information on how to configure the providers.
 [articulate/terraform-provider-okta]: https://github.com/articulate/terraform-provider-okta
 [DeviaVir/terraform-provider-gsuite]: https://github.com/DeviaVir/terraform-provider-gsuite
 
+## Running tests
+There are a limited number of tests that can be invoked with 
+`ruby -I lib  test/terraorg/model/org_test.rb `
+
 ## Suggested process
 
 At [LiveRamp], a pull request based workflow leveraging [Atlantis] is used to
