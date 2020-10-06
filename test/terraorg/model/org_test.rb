@@ -25,8 +25,6 @@ class OrgTest < Minitest::Test
     def test_org_tg_generation
         tf = @org.generate_tf_org
 
-        puts tf
-
         assert tf != nil
 
         # Assert tf contains locale specific okta group
