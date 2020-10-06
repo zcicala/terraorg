@@ -18,13 +18,26 @@ class OrgTest < Minitest::Test
       
     end
 
-    def test_org_exists
-        assert @org != nil
+
+    def test_platoons_tf_generation
+        tf = @org.generate_tf_platoons
+
+        #Make sure not null
+        assert tf != nil
+
+        #Make sure we're producing global squads Okta and Gsuite tf
+        assert tf.include?('resource "okta_group" "contoso-squad-sales"')
+        assert tf.include?('resource "gsuite_group_members" "contoso-squad-sales"')
+        
+        #Make sure we're producing locale squads Okta and Gsuite tf
+        assert tf.include?('resource "gsuite_group" "contoso-squad-sales-gb"')
+        assert tf.include?('resource "gsuite_group_members" "contoso-squad-sales-gb"')
     end
 
-    def test_org_tg_generation
+    def test_org_tf_generation
         tf = @org.generate_tf_org
 
+        #Make sure not null
         assert tf != nil
 
         # Assert tf contains locale specific okta group
@@ -33,4 +46,20 @@ class OrgTest < Minitest::Test
         # Assert tf contains locale specific gsuite group
         assert tf.include?('resource "gsuite_group" "contoso-all-gb" {')
     end
+
+    def test_files_written
+        @org.generate_tf
+
+        #Make sure we're generating the files we expect to generate
+        assert File.exist?('auto.platoons.tf')
+        assert File.exist?('auto.exception_squads.tf')
+        assert File.exist?('auto.org.tf')        
+    end
+
+    def teardown
+        FileUtils.rm_f('auto.platoons.tf') if File.exist?('auto.platoons.tf')
+        FileUtils.rm_f('auto.exception_squads.tf') if File.exist?('auto.exception_squads.tf')
+        FileUtils.rm_f('auto.org.tf') if File.exist?('auto.org.tf')
+    end
+
 end

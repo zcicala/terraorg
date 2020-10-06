@@ -1,4 +1,4 @@
-# Copyright 2019-2020 LiveRamp Holdings, Inc.
+5.0# Copyright 2019-2020 LiveRamp Holdings, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,5 +13,5 @@
 # limitations under the License.
 
 module Terraorg
-  VERSION = '0.4.0'
+  VERSION = '0.5.0'
 end

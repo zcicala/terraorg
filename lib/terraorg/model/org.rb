@@ -202,11 +202,13 @@ class Org
     md_lines.join("\n")
   end
 
-  # def generate_tf_platoons
-  #   @member_platoons.map { |p| p.generate_tf(@id) }.join("\n")
+  def generate_tf_platoons
+    @member_platoons.map { |p| p.generate_tf(@id) }.join("\n")
+  end
 
-  # def generate_tf_sqauds
-  #   @member_exception_squads.map { |s| s.generate_tf(@id) }.join("\n")
+  def generate_tf_squads
+    @member_exception_squads.map { |s| s.generate_tf(@id) }.join("\n")
+  end
 
   def generate_tf_org
     tf = ''
@@ -276,7 +278,7 @@ EOF
     tf = generate_tf_platoons
     File.write('auto.platoons.tf', tf)
 
-    tf = generate_tf_sqauds
+    tf = generate_tf_squads
     File.write('auto.exception_squads.tf', tf)
 
     tf = generate_tf_org
