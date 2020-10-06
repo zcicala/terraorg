@@ -202,13 +202,14 @@ class Org
     md_lines.join("\n")
   end
 
-  def generate_tf
-    tf = @member_platoons.map { |p| p.generate_tf(@id) }.join("\n")
-    File.write('auto.platoons.tf', tf)
+  # def generate_tf_platoons
+  #   @member_platoons.map { |p| p.generate_tf(@id) }.join("\n")
 
-    tf = @member_exception_squads.map { |s| s.generate_tf(@id) }.join("\n")
-    File.write('auto.exception_squads.tf', tf)
+  # def generate_tf_sqauds
+  #   @member_exception_squads.map { |s| s.generate_tf(@id) }.join("\n")
 
+  def generate_tf_org
+    tf = ''
     # Roll all platoons and exception squads into the org.
     roll_up_to_org = \
       @member_exception_squads.map { |s| s.unique_name(@id, nil) } + \
@@ -248,14 +249,18 @@ EOF
     all_locations[@manager_location] = all_locations.fetch(@manager_location, Set.new).add(@manager)
 
     all_locations.each do |l, m|
+      description = "#{@name} organization members based in #{l} (terraorg)"
       name = "#{unique_name}-#{l.downcase}"
       tf += <<-EOF
 resource "okta_group" "#{name}" {
   name = "#{name}"
-  description = "#{@name} organization members based in #{l} (terraorg)"
+  description = "#{description}"
   users = #{Util.persons_tf(m)}
 }
+
+#{Util.gsuite_group_tf(name, @gsuite_domain, m, description)}
 EOF
+
     end
 
     # Generate a special GSuite group for all managers (org, platoon, squad
@@ -264,7 +269,17 @@ EOF
     all_managers = Set.new([@manager] + @platoons.all.map(&:manager) + @squads.all.map(&:manager).select { |m| m })
     manager_dl = "#{@id}-managers"
     tf += Util.gsuite_group_tf(manager_dl, @gsuite_domain, all_managers, "All managers of the #{@name} organization (terraorg)")
+    tf
+  end
 
+  def generate_tf
+    tf = generate_tf_platoons
+    File.write('auto.platoons.tf', tf)
+
+    tf = generate_tf_sqauds
+    File.write('auto.exception_squads.tf', tf)
+
+    tf = generate_tf_org
     File.write('auto.org.tf', tf)
   end
 
