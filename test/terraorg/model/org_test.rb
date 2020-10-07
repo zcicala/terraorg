@@ -1,3 +1,8 @@
+
+require 'rubygems'
+require 'bundler/setup'
+
+Bundler.setup(:default, :test)
 require 'minitest/autorun'
 require './lib/terraorg/model/org'
 require './lib/terraorg/model/people'

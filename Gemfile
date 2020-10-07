@@ -15,4 +15,8 @@
 source 'https://rubygems.org'
 
 gemspec
-gem "minitest"
+
+group :test do
+    gem "minitest"
+end
+  
