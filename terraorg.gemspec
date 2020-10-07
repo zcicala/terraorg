@@ -34,6 +34,8 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'faraday', '~> 1'
   gem.add_dependency 'neatjson', '~> 0.9'
   gem.add_dependency 'oktakit', '~> 0.2'
+  
+  gem.add_development_dependency 'minitest', '~> 5.14'
 
   # ensure the gem is built out of versioned files
   gem.files = Dir['{bin,lib}/**/*', 'README*', 'LICENSE*']
