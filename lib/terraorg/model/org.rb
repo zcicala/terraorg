@@ -135,7 +135,7 @@ class Org
     # Validate that any associate is a member of some squad
     associates_but_not_members = Set.new(all_associates.map(&:id)) - Set.new(all_members.map(&:id)) - exceptions
     if !associates_but_not_members.empty?
-      $stderr.puts "ERROR: #{associates_but_not_members.map(&:id)} are associates of squads but not members of any squad"
+      $stderr.puts "ERROR: #{associates_but_not_members} are associates of squads but not members of any squad"
       failure = true
     end
 
