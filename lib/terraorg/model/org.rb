@@ -1,4 +1,5 @@
 # Copyright 2019-2020 LiveRamp Holdings, Inc.
+# Copyright 2020- Joshua Kwan
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,7 +55,7 @@ class Org
 
     # Do not allow the JSON files to contain any people who have left.
     unless @people.inactive.empty?
-      $stderr.puts "ERROR: Users have left the company: #{@people.inactive.map(&:id).join(', ')}"
+      $stderr.puts "ERROR: Users have left the company, or are Suspended in Okta: #{@people.inactive.map(&:id).join(', ')}"
       failure = true
     end
 
@@ -135,7 +136,7 @@ class Org
     # Validate that any associate is a member of some squad
     associates_but_not_members = Set.new(all_associates.map(&:id)) - Set.new(all_members.map(&:id)) - exceptions
     if !associates_but_not_members.empty?
-      $stderr.puts "ERROR: #{associates_but_not_members.map(&:id)} are associates of squads but not members of any squad"
+      $stderr.puts "ERROR: #{associates_but_not_members} are associates of squads but not members of any squad"
       failure = true
     end
 
