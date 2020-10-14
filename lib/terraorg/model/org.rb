@@ -137,7 +137,7 @@ class Org
     if !allow_orphaned_associates
       associates_but_not_members = Set.new(all_associates.map(&:id)) - Set.new(all_members.map(&:id)) - exceptions
       if !associates_but_not_members.empty?
-        $stderr.puts "ERROR: #{associates_but_not_members.to_a().join()} are associates of squads but not members of any squad"
+        $stderr.puts "ERROR: #{associates_but_not_members.to_a} are associates of squads but not members of any squad"
         failure = true
       end
     end
