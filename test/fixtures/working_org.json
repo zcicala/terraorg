@@ -1,0 +1,21 @@
+{
+    "exception_people": [
+        {
+            "location": "US",
+            "members": [
+                "exception1"
+            ]
+        }
+    ],
+    "exception_squads": [],
+    "id": "contoso",
+    "manager": "rchen",
+    "manager_location": "US",
+    "metadata": {},
+    "name": "Contoso",
+    "platoons": [
+        "sprockets",
+        "widgets"
+    ],
+    "version": "v1"
+}
