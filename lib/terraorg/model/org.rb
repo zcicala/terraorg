@@ -50,7 +50,7 @@ class Org
     @squads = squads
   end
 
-  def validate!(strict: true, allow_orhpaned_associates: false)
+  def validate!(strict: true, allow_orphaned_associates: false)
     failure = false
 
     # Do not allow the JSON files to contain any people who have left.
