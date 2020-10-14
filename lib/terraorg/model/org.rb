@@ -50,7 +50,7 @@ class Org
     @squads = squads
   end
 
-  def validate!(strict: true)
+  def validate!(strict: true, allow_orphaned_associates: false)
     failure = false
 
     # Do not allow the JSON files to contain any people who have left.
@@ -134,10 +134,12 @@ class Org
     end
 
     # Validate that any associate is a member of some squad
-    associates_but_not_members = Set.new(all_associates.map(&:id)) - Set.new(all_members.map(&:id)) - exceptions
-    if !associates_but_not_members.empty?
-      $stderr.puts "ERROR: #{associates_but_not_members} are associates of squads but not members of any squad"
-      failure = true
+    if !allow_orphaned_associates
+      associates_but_not_members = Set.new(all_associates.map(&:id)) - Set.new(all_members.map(&:id)) - exceptions
+      if !associates_but_not_members.empty?
+        $stderr.puts "ERROR: #{associates_but_not_members.to_a} are associates of squads but not members of any squad"
+        failure = true
+      end
     end
 
     raise "CRITICAL: Validation failed due to at least one error above" if failure && strict
