@@ -134,7 +134,7 @@ class Org
     end
 
     # Validate that any associate is a member of some squad
-    if !allow_orhpaned_associates
+    if !allow_orphaned_associates
       associates_but_not_members = Set.new(all_associates.map(&:id)) - Set.new(all_members.map(&:id)) - exceptions
       if !associates_but_not_members.empty?
         $stderr.puts "ERROR: #{associates_but_not_members.to_a().join()} are associates of squads but not members of any squad"
