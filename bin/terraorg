@@ -32,6 +32,7 @@ ACTIONS = [
 ].freeze
 
 STRICT_VALIDATION = ENV.fetch('TERRAORG_STRICT_VALIDATION', 'true')
+ALLOW_ORPHANED_ASSOCIATES = ENV.fetch('ALLOW_ORPHANED_ASSOCIATES', 'false')
 SQUADS_FILE = ENV.fetch('TERRAORG_SQUADS', 'squads.json')
 PLATOONS_FILE = ENV.fetch('TERRAORG_PLATOONS', 'platoons.json')
 ORG_FILE = ENV.fetch('TERRAORG_ROOT', 'org.json')
@@ -97,7 +98,8 @@ org_data = File.read(ORG_FILE)
 org = Org.new(JSON.parse(org_data), platoons, squads, people, GSUITE_DOMAIN)
 
 strict = (STRICT_VALIDATION == 'true')
-org.validate!(strict: strict)
+allow_orphaned_associates = (ALLOW_ORPHANED_ASSOCIATES == 'true')
+org.validate!(strict: strict, allow_orphaned_associates)
 
 case action
 when 'generate-squads-md'
