@@ -99,7 +99,7 @@ org = Org.new(JSON.parse(org_data), platoons, squads, people, GSUITE_DOMAIN)
 
 strict = (STRICT_VALIDATION == 'true')
 allow_orphaned_associates = (ALLOW_ORPHANED_ASSOCIATES == 'true')
-org.validate!(strict: strict, allow_orphaned_associates)
+org.validate!(strict: strict, allow_orphaned_associates: allow_orphaned_associates)
 
 case action
 when 'generate-squads-md'

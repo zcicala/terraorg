@@ -1,0 +1,92 @@
+{
+    "squads": [
+        {
+            "id": "legal",
+            "metadata": {
+                "epo": "epo4",
+                "manager": "manager5",
+                "pm": [
+                    "pm1"
+                ],
+                "slack": "#legal",
+                "sme": "sme8"
+            },
+            "name": "Legal",
+            "team": [
+                {
+                    "location": "US",
+                    "members": [
+                        "member1",
+                        "member2"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "logistics",
+            "metadata": {
+                "epo": "epo9",
+                "manager": "manager11",
+                "pm": [
+                    "pm9"
+                ],
+                "slack": "#logistics",
+                "sme": "sme9"
+            },
+            "name": "Logistics",
+            "team": [
+                {
+                    "location": "CN",
+                    "members": [
+                        "member55",
+                        "member56"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "marketing",
+            "metadata": {
+                "manager": "manager2",
+                "pm": [
+                    "pm2"
+                ],
+                "slack": "#marketing",
+                "sme": "sme2"
+            },
+            "name": "Marketing",
+            "team": [
+                {
+                    "location": "FR",
+                    "members": [
+                        "member3",
+                        "member4"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "sales",
+            "metadata": {
+                "epo": "epo1",
+                "manager": "epo2",
+                "pm": [
+                    "pm1"
+                ],
+                "slack": "#sales",
+                "sme": "sme1"
+            },
+            "name": "Sales",
+            "team": [
+                {
+                    "location": "GB",
+                    "members": [
+                        "member8",
+                        "member9"
+                    ]
+                }
+            ]
+        }
+    ],
+    "version": "v1"
+}

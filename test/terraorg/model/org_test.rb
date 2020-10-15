@@ -12,12 +12,16 @@ require './lib/terraorg/model/platoons'
 class OrgTest < Minitest::Test
     def setup
         
+    @working_org =  File.read('./test/fixtures/working_org.json')
+    @working_platoons =  File.read('./test/fixtures/working_platoons.json')
+    @working_squads =  File.read('./test/fixtures/working_squads.json')
+    @orphaned_associates_squads =  File.read('./test/fixtures/orphaned_associates_squads.json')
       
     end
 
 
     def test_platoons_tf_generation
-        org = generate_org($WORKING_ORG, $WORKING_PLATOONS, $WORKING_SQUADS)
+        org = generate_org(@working_org, @working_platoons, @working_squads)
         tf = org.generate_tf_platoons
 
         #Make sure not null
@@ -33,7 +37,7 @@ class OrgTest < Minitest::Test
     end
 
     def test_org_tf_generation
-        org = generate_org($WORKING_ORG, $WORKING_PLATOONS, $WORKING_SQUADS)
+        org = generate_org(@working_org, @working_platoons, @working_squads)
         tf = org.generate_tf_org
 
         #Make sure not null
@@ -47,7 +51,7 @@ class OrgTest < Minitest::Test
     end
 
     def test_files_written
-        org = generate_org($WORKING_ORG, $WORKING_PLATOONS, $WORKING_SQUADS)
+        org = generate_org(@working_org, @working_platoons, @working_squads)
         tf = org.generate_tf
 
         #Make sure we're generating the files we expect to generate
@@ -57,13 +61,13 @@ class OrgTest < Minitest::Test
     end
 
     def test_associate_without_squad
-        org = generate_org($WORKING_ORG, $WORKING_PLATOONS, $ORPHANED_ASSOCIATE_SQUADS)
-        assert_output('', "ERROR: associate1 are associates of squads but not members of any squad\n") {
+        org = generate_org(@working_org, @working_platoons, @orphaned_associates_squads)
+        assert_output('', "ERROR: [\"associate1\"] are associates of squads but not members of any squad\n") {
             org.validate!(strict: false)
         }
 
         assert_output('', "") {
-            org.validate!(strict: false, allow_orhpaned_associates: true)
+            org.validate!(strict: false, allow_orphaned_associates: true)
         }
             
     end
@@ -82,251 +86,5 @@ class OrgTest < Minitest::Test
         platoons = Platoons.new(JSON.parse(platoons_data), squads, people, gsuite_domain)
         return Org.new(JSON.parse(org_data), platoons, squads, people, gsuite_domain)
     end
-
-    $WORKING_ORG =  <<-JSON
-            {
-        "exception_people": [
-            {
-            "location": "US",
-            "members": [
-                "exception1"
-            ]
-            }
-        ],
-        "exception_squads": [],
-        "id": "contoso",
-        "manager": "rchen",
-        "manager_location": "US",
-        "metadata": {},
-        "name": "Contoso",
-        "platoons": [
-            "sprockets",
-            "widgets"
-        ],
-        "version": "v1"
-        }
-    JSON
-
-    $WORKING_PLATOONS =  <<-JSON
-    {
-        "platoons": [
-          {
-            "id": "sprockets",
-            "manager": "manager2",
-            "name": "Sprockets",
-            "squads": [
-              "legal",
-              "logistics"
-            ]
-          },
-          {
-            "id": "widgets",
-            "manager": "manager1",
-            "name": "Widgets",
-            "squads": [
-              "marketing",
-              "sales"
-            ]
-          }
-        ],
-        "version": "v1"
-      }
-      
-    JSON
-
-    $WORKING_SQUADS =  <<-JSON
-    {
-  "squads": [
-    {
-      "id": "legal",
-      "metadata": {
-        "epo": "epo4",
-        "manager": "manager5",
-        "pm": [
-          "pm1"
-        ],
-        "slack": "#legal",
-        "sme": "sme8"
-      },
-      "name": "Legal",
-      "team": [
-        {
-          "location": "US",
-          "members": [
-            "member1",
-            "member2"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "logistics",
-      "metadata": {
-        "epo": "epo9",
-        "manager": "manager11",
-        "pm": [
-          "pm9"
-        ],
-        "slack": "#logistics",
-        "sme": "sme9"
-      },
-      "name": "Logistics",
-      "team": [
-        {
-          "location": "CN",
-          "members": [
-            "member55",
-            "member56"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "marketing",
-      "metadata": {
-        "manager": "manager2",
-        "pm": [
-          "pm2"
-        ],
-        "slack": "#marketing",
-        "sme": "sme2"
-      },
-      "name": "Marketing",
-      "team": [
-        {
-          "location": "FR",
-          "members": [
-            "member3",
-            "member4"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "sales",
-      "metadata": {
-        "epo": "epo1",
-        "manager": "epo2",
-        "pm": [
-          "pm1"
-        ],
-        "slack": "#sales",
-        "sme": "sme1"
-      },
-      "name": "Sales",
-      "team": [
-        {
-          "location": "GB",
-          "members": [
-            "member8",
-            "member9"
-          ]
-        }
-      ]
-    }
-  ],
-  "version": "v1"
-}
-
-    JSON
-
-    $ORPHANED_ASSOCIATE_SQUADS =  <<-JSON
-    {
-  "squads": [
-    {
-      "id": "legal",
-      "metadata": {
-        "epo": "epo4",
-        "manager": "manager5",
-        "pm": [
-          "pm1"
-        ],
-        "slack": "#legal",
-        "sme": "sme8"
-      },
-      "name": "Legal",
-      "team": [
-        {
-          "location": "US",
-          "members": [
-            "member1",
-            "member2"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "logistics",
-      "metadata": {
-        "epo": "epo9",
-        "manager": "manager11",
-        "pm": [
-          "pm9"
-        ],
-        "slack": "#logistics",
-        "sme": "sme9"
-      },
-      "name": "Logistics",
-      "team": [
-        {
-          "location": "CN",
-          "members": [
-            "member55",
-            "member56"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "marketing",
-      "metadata": {
-        "manager": "manager2",
-        "pm": [
-          "pm2"
-        ],
-        "slack": "#marketing",
-        "sme": "sme2"
-      },
-      "name": "Marketing",
-      "team": [
-        {
-          "location": "FR",
-          "associates":[
-              "associate1"
-          ],
-          "members": [
-            "member3",
-            "member4"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "sales",
-      "metadata": {
-        "epo": "epo1",
-        "manager": "epo2",
-        "pm": [
-          "pm1"
-        ],
-        "slack": "#sales",
-        "sme": "sme1"
-      },
-      "name": "Sales",
-      "team": [
-        {
-          "location": "GB",
-          "members": [
-            "member8",
-            "member9"
-          ]
-        }
-      ]
-    }
-  ],
-  "version": "v1"
-}
-
-    JSON
 
 end
